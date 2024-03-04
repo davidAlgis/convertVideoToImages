@@ -67,6 +67,8 @@ def video_to_png(video_path, output_folder, save_fps, remove_bg_flag):
 
             if not cv2.imwrite(frame_path, frame):
                 raise Exception(f"Could not write image at path {frame_path}")
+            is_success, im_buf_arr = cv2.imencode(".jpg", frame)
+            im_buf_arr.tofile(frame_path)
 
             if remove_bg_flag:
                 remove_background(frame_path)
