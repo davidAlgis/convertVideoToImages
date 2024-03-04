@@ -34,7 +34,13 @@ def video_to_png(video_path, output_folder, save_fps, remove_bg_flag):
     Converts a video to a series of PNG images.
     """
     if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
+        print(f"Create folder : {output_folder}.")
+        try:
+            os.makedirs(output_folder, exist_ok=True)
+        except Exception as e:
+            print(
+                f"Unable to create folder {output_folder}, raise exception {e}")
+            return -1
 
     cap = cv2.VideoCapture(video_path)
 
@@ -58,7 +64,9 @@ def video_to_png(video_path, output_folder, save_fps, remove_bg_flag):
         if frame_id % frame_interval == 0:
             frame_path = os.path.join(
                 output_folder, f"frame_{saved_frame_count:04d}.png")
-            cv2.imwrite(frame_path, frame)
+
+            if not cv2.imwrite(frame_path, frame):
+                raise Exception(f"Could not write image at path {frame_path}")
 
             if remove_bg_flag:
                 remove_background(frame_path)
