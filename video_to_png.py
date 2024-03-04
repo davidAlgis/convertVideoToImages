@@ -5,6 +5,7 @@ from tqdm import tqdm
 import argparse
 import glob
 from rembg import remove
+import ast
 
 
 def find_first_video():
@@ -29,7 +30,7 @@ def remove_background(image_path):
         f.write(output_image)
 
 
-def video_to_png(video_path, output_folder, save_fps, remove_bg_flag):
+def video_to_png(video_path, output_folder, save_fps, remove_bg_flag, crop):
     """
     Converts a video to a series of PNG images.
     """
@@ -60,13 +61,15 @@ def video_to_png(video_path, output_folder, save_fps, remove_bg_flag):
         ret, frame = cap.read()
         if not ret:
             break
+        if crop != ((-1, -1), (-1, -1)):
+            left, upper = crop[0]
+            right, lower = crop[1]
+            frame = frame[upper:lower, left:right]
 
         if frame_id % frame_interval == 0:
             frame_path = os.path.join(
                 output_folder, f"frame_{saved_frame_count:04d}.png")
 
-            if not cv2.imwrite(frame_path, frame):
-                raise Exception(f"Could not write image at path {frame_path}")
             is_success, im_buf_arr = cv2.imencode(".jpg", frame)
             im_buf_arr.tofile(frame_path)
 
@@ -93,7 +96,8 @@ def main():
                         1, help="Frames per second to save.")
     parser.add_argument("-r", "--remove_bg", action='store_true',
                         help="Remove background from each image after saving.", default=False)
-
+    parser.add_argument("-c", "--crop", type=ast.literal_eval, default=((-1, -1), (-1, -1)),
+                        help="Crop area as a tuple of two points: (left, upper), (right, lower).")
     args = parser.parse_args()
 
     if not args.input:
@@ -104,7 +108,7 @@ def main():
         else:
             print(f"Found video file: {args.input}")
 
-    video_to_png(args.input, args.output, args.fps, args.remove_bg)
+    video_to_png(args.input, args.output, args.fps, args.remove_bg, args.crop)
 
 
 if __name__ == "__main__":

@@ -38,6 +38,8 @@ python video_to_png.py [options]
 
 - `-r`, `--remove_bg`: Enable background removal from each image before saving. By default, this feature is disabled.
 
+- `-c`, `--crop` "((left, up), (right, lower))": Crop the image with two corner left up and right down. By default, this feature is disabled.
+
 - `-h`, `--help`: Display help information showing all command-line options.
 
 ## Example

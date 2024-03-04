@@ -3,3 +3,4 @@ Pillow
 tqdm
 rembg
 argparse
+ast
