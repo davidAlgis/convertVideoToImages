@@ -57,6 +57,12 @@ If you want to save images at 10 frames per second without removing backgrounds,
 python video_to_png.py -i example.mp4 -o ./output_images -f 10
 ```
 
+If you want to crop images too, you can use this updated command:
+
+```
+python video_to_png.py -i example.mp4 -o ./output_images -f 10 -c "((345,342),(865,1660))"
+```
+
 
 ## Issues
 
