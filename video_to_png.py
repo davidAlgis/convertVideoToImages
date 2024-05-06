@@ -91,7 +91,7 @@ def main():
     parser.add_argument("-i", "--input", type=str,
                         help="Path to the input video file.")
     parser.add_argument("-o", "--output", type=str,
-                        default="output", help="Path to the output folder.")
+                        default=".\\output", help="Path to the output folder (default is a folder named output in the current folder).")
     parser.add_argument("-f", "--fps", type=int, default=-
                         1, help="Frames per second to save.")
     parser.add_argument("-r", "--remove_bg", action='store_true',
